@@ -36,84 +36,32 @@
 
 
 
+
+
 namespace App\Entity;
 
 use App\Repository\OffreRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-// Classe représentant une offre d'emploi.
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
 {
-    // Identifiant unique de l'offre.
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    // Titre du poste (exemple : Développeur Symfony, Comptable, etc.).
     #[ORM\Column(type: 'string', length: 255)]
     private $titre;
 
-    // Date à laquelle l'offre a été publiée.
     #[ORM\Column(type: 'datetime')]
     private $datePublication;
 
-    // Nombre de candidatures reçues pour cette offre.
     #[ORM\Column(type: 'integer')]
     private $candidatures = 0;
 
-    // Statut de l'offre (Publié, Brouillon, Clôturé).
     #[ORM\Column(type: 'string', length: 50)]
     private $statut;
 
-    // Getters et Setters pour accéder et modifier les propriétés.
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): self
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    public function getDatePublication(): ?\DateTimeInterface
-    {
-        return $this->datePublication;
-    }
-
-    public function setDatePublication(\DateTimeInterface $datePublication): self
-    {
-        $this->datePublication = $datePublication;
-        return $this;
-    }
-
-    public function getCandidatures(): ?int
-    {
-        return $this->candidatures;
-    }
-
-    public function setCandidatures(int $candidatures): self
-    {
-        $this->candidatures = $candidatures;
-        return $this;
-    }
-
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): self
-    {
-        $this->statut = $statut;
-        return $this;
-    }
+    // Getters and Setters...
 }
