@@ -22,6 +22,8 @@
             "symfony/runtime": true
         },
         "bump-after-update": true,
+
+x
         "sort-packages": true
     },
     "autoload": {
