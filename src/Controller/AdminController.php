@@ -2,15 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController; // Utilisation correcte du contrôleur abstrait
+use App\Repository\OffreRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AdminController extends AbstractController // Héritage du contrôleur abstrait
+class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'admin_dashboard')]
-    public function index(): Response
+    public function index(OffreRepository $offreRepository): Response
     {
-        return new Response('<h1>Bienvenue dans le tableau de bord Admin</h1>');
+        $offres = $offreRepository->findAll();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'offres' => $offres,
+        ]);
     }
 }
