@@ -1,0 +1,60 @@
+#configuration de la sécurité et restriction de l'accès aux admins.
+
+
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|imagsecurity: # Configuration pour la sécurité dans Symfony
+    encoders: # Définition des encodeurs utilisés pour les mots de passe
+        App\Entity\User: # L'entité User sera encodée
+            algorithm: bcrypt # Utilisation de l'algorithme bcrypt pour sécuriser les mots de passe
+
+    providers: # Définition des sources d'utilisateurs
+        app_user_provider: # Nom du fournisseur d'utilisateurs
+            entity: # Les utilisateurs seront récupérés via une entité Doctrine
+                class: App\Entity\User # Classe qui représente les utilisateurs
+                property: email # La propriété utilisée pour identifier les utilisateurs (email)
+
+    firewalls: # Configuration des firewalls pour sécuriser différentes parties de l'application
+        dev: # Firewall pour l'environnement de développement
+            pattern: ^/(_(profiler|wdt)|css|images|js)/ # Chemins exclus du contrôle de sécurité
+            security: false # Pas de sécurité appliquée ici
+
+        main: # Firewall principal pour l'application
+            anonymous: true # Permettre l'accès à des utilisateurs non authentifiés
+            lazy: true # Authentification différée jusqu'à ce qu'elle soit nécessaire
+            provider: app_user_provider # Utilisation du fournisseur défini plus haut
+            form_login: # Configuration du formulaire d'authentification
+                login_path: login # Chemin vers la page de connexion
+                check_path: login # Chemin pour vérifier les informations d'identification
+            logout: # Configuration pour la déconnexion
+                path: logout # Chemin pour se déconnecter
+
+    access_control: # Contrôle d'accès basé sur les chemins et les rôles
+        - { path: ^/admin, roles: ROLE_ADMIN } # Accès à /admin réservé aux utilisateurs avec le rôle ROLE_ADMIN
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Accès à /login autorisé pour tout le mondees|js)/
+            security: false
+
+        main:
+            anonymous: true
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path: logout
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
