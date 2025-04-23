@@ -7,6 +7,12 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+ dev_marte
+        "doctrine/dbal": "^3.9.4",
+        "doctrine/doctrine-bundle": "^2.14",
+        "doctrine/doctrine-migrations-bundle": "^3.4.1",
+        "doctrine/orm": "^3.3.2",
+
  HEAD
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
@@ -17,11 +23,21 @@
         "doctrine/migrations": "^3.9",
  a69647697b066db034d48a23f9f8de87509dd430
         "doctrine/orm": "^3.3",
+ dev
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
-        "symfony/flex": "^2",
+        "symfony/flex": "^2.5",
+        "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
         "symfony/runtime": "7.2.*",
+ dev_marte
+        "symfony/security-csrf": "7.2.*",
+        "symfony/twig-bundle": "7.2.*",
+        "symfony/validator": "7.2.*",
+        "symfony/webpack-encore-bundle": "^2.2",
+        "symfony/yaml": "7.2.*"
+    },
+
         "symfony/security-bundle": "7.2.*",
         "symfony/yaml": "7.2.*"
     },
@@ -33,6 +49,7 @@
  a69647697b066db034d48a23f9f8de87509dd430
         "symfony/maker-bundle": "^1.62"
     },
+ dev
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
@@ -82,5 +99,9 @@
             "allow-contrib": false,
             "require": "7.2.*"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.1",
+        "symfony/maker-bundle": "^1.62"
     }
 }
