@@ -1,39 +1,42 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord Admin</title>
-</head>
-<body>
-    <h1>Tableau de bord Admin</h1>
-    <p>Bienvenue dans l'interface RH !</p>
+{% extends 'base.html.twig' %}
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom de l'Offre</th>
-                <th>Date</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for offre in offres %}
-                <tr>
-                    <td>{{ offre.id }}</td>
-                    <td>{{ offre.titre }}</td>
-                    <td>{{ offre.date }}</td>
-                    <td>{{ offre.statut }}</td>
-                    <td>
-                        <a href="#">Modifier</a> |
-                        <a href="#">Publier</a> |
-                        <a href="#">Archiver</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% block title %}Tableau de bord RH{% endblock %}
+
+{% block body %}
+<h1>Tableau de bord RH</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Date de publication</th>
+            <th>Nombre de candidatures</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for offre in offres %}
+        <tr>
+            <td>
+                <a href="{{ path('admin_candidatures', { id: offre.id }) }}">
+                    {{ offre.titre }}
+                </a>
+            </td>
+            <td>{{ offre.datePublication|date('d/m/Y') }}</td>
+            <td>{{ offre.candidatures|length }}</td>
+            <td>{{ offre.statut }}</td>
+            <td>
+                <a href="{{ path('admin_candidatures', { id: offre.id }) }}">Voir</a> |
+                <a href="{{ path('admin_offre_publier', { id: offre.id }) }}">Publier</a> |
+                <a href="{{ path('admin_offre_cloturer', { id: offre.id }) }}">Clôturer</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">Aucune offre disponible.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
