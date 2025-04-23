@@ -1,0 +1,164 @@
+mespace App\Controller\Admin;
+
+use App\Entity\Candidature;
+use App\Form\CandidatureType;
+use App\Repository\CandidatureRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/admin/candidature')]
+class CandidatureController extends AbstractController
+{
+    #[Route('/', name: 'admin_candidature_index')]
+    public function index(CandidatureRepository $repo): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_RH');
+        return $this->render('admin/candidature/index.html.twig', [
+            'candidatures' => $repo->findAll(),
+        ]);
+    }
+
+    #[Route('/new', name: 'admin_candidature_new')]
+    public function new(Request $request, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_RH');
+
+        $candidature = new Candidature();
+        $form = $this->createForm(CandidatureType::class, $candidature);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Upload CV + lettre à faire ici si besoin
+            $em->persist($candidature);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_candidature_index');
+        }
+
+        return $this->render('admin/candidature/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}
+namespace App\Form;
+
+use App\Entity\Candidature;
+use App\Entity\Offre;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CandidatureType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'email',
+            ])
+            ->add('offre', EntityType::class, [
+                'class' => Offre::class,
+                'choice_label' => 'titre',
+            ])
+            ->add('cv', FileType::class, ['mapped' => false])
+            ->add('lettre', FileType::class, ['mapped' => false])
+            ->add('statut')
+            ->add('commentaireInterne');
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Candidature::class,
+        ]);
+    }
+}
+
+ Careful, database "portal_rh" will be purged. Do you want to continue? (yes/no) [no]:
+ > yes
+
+   > purging database
+namespace App\Entity;
+
+use App\Repository\CandidatureRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: CandidatureRepository::class)]
+class Candidature
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne]
+    private ?Offre $offre = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $cv = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lettre = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $statut = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $commentaireInterne = null;
+
+    // Getters & setters...
+}
+namespace App\Entity;
+
+use App\Repository\CandidatureRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: CandidatureRepository::class)]
+class Candidature
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne]
+    private ?Offre $offre = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $cv = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lettre = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $statut = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $commentaireInterne = null;
+
+    // Getters & setters...
+}
+[critical] Error thrown while running command "doctrine:fixtures:load". Message: "The autoloader expected class "App\Entity\Candidature" to be defined in file "/mnt/c/WINDOWS/system32/JustCode/vendor/composer/../../src/Entity/Candidature.php". The file was found but the class was not in it, the class name or namespace probably has a typo."
+
+In DebugClassLoader.php line 358:
+
+  The autoloader expected class "App\Entity\Candidature" to be defined in file "/mnt/c/WINDOWS/system32/JustCode/vendor/composer/../../src/Entity/Candidature.php". The file was found but th
+  e class was not in it, the class name or namespace probably has a typo.
+
+
+doctrine:fixtures:load [--append] [--group GROUP] [--em EM] [--purger PURGER] [--purge-exclusions PURGE-EXCLUSIONS] [--purge-with-truncate]
+
+[user@DESKTOP-3TIEQO0 JustCode]$
