@@ -4,13 +4,27 @@ namespace App\Entity;
 
 use App\Repository\CandidatureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CandidatureRepository::class)]
+#[Vich\Uploadable]
 class Candidature
 {
-    // 1. Liste des statuts possibles
-    public const STATUSES = ['reçue', 'en cours', 'entretien', 'refusée'];
+    public const STATUS_RECEIVED = 'reçue';
+    public const STATUS_IN_REVIEW = 'en cours';
+    public const STATUS_INTERVIEW = 'entretien';
+    public const STATUS_REJECTED = 'refusée';
+    public const STATUS_ACCEPTED = 'acceptée';
+
+    public const STATUS_CHOICES = [
+        'Reçue' => self::STATUS_RECEIVED,
+        'En cours' => self::STATUS_IN_REVIEW,
+        'Entretien' => self::STATUS_INTERVIEW,
+        'Refusée' => self::STATUS_REJECTED,
+        'Acceptée' => self::STATUS_ACCEPTED,
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,52 +40,57 @@ class Candidature
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "L’email est requis.")]
-    #[Assert\Email(message: "L’email '{{ value }}' n’est pas valide.")]
+    #[Assert\NotBlank(message: "L'email est requis.")]
+    #[Assert\Email(message: "L'email '{{ value }}' n'est pas valide.")]
     private ?string $email = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $dateCandidature = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Assert\File(
-        maxSize: '2M',
-        mimeTypes: ['application/pdf'],
-        mimeTypesMessage: 'Le CV doit être un fichier PDF de maximum 2 Mo.'
-    )]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Vich\UploadableField(mapping: 'candidature_file', fileNameProperty: 'cv')]
     #[Assert\File(
         maxSize: '2M',
         mimeTypes: ['application/pdf'],
-        mimeTypesMessage: 'La lettre de motivation doit être un fichier PDF de maximum 2 Mo.'
+        mimeTypesMessage: 'Veuillez uploader un fichier PDF valide (max 2Mo)'
     )]
-    private ?string $lettreMotivation = null;
+    private ?File $cvFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Choice(
-        choices: self::STATUSES,
-        message: 'Le statut doit être l’un des suivants : {{ choices }}.'
+    private ?string $lettreMotivation = null;
+
+    #[Vich\UploadableField(mapping: 'candidature_file', fileNameProperty: 'lettreMotivation')]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['application/pdf'],
+        mimeTypesMessage: 'Veuillez uploader un fichier PDF valide (max 2Mo)'
     )]
-    private ?string $status = 'reçue';
+    private ?File $lettreMotivationFile = null;
+
+    #[ORM\Column(length: 20)]
+    private string $status = self::STATUS_RECEIVED;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $noteInterne = null;
 
-    #[ORM\ManyToOne(targetEntity: Offre::class, inversedBy: 'candidatures')]
+    #[ORM\ManyToOne(inversedBy: 'candidatures')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Offre $offre = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'candidatures')]
-    #[ORM\JoinColumn(nullable: true)]  // nullable pour candidatures anonymes si besoin
+    #[ORM\ManyToOne(inversedBy: 'candidatures')]
     private ?User $user = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
         $this->dateCandidature = new \DateTime();
-        $this->status = 'reçue';
     }
+
+    // Getters/Setters...
 
     public function getId(): ?int
     {
@@ -83,7 +102,7 @@ class Candidature
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
         return $this;
@@ -94,7 +113,7 @@ class Candidature
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
         return $this;
@@ -105,7 +124,7 @@ class Candidature
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): static
     {
         $this->email = $email;
         return $this;
@@ -116,7 +135,7 @@ class Candidature
         return $this->dateCandidature;
     }
 
-    public function setDateCandidature(\DateTimeInterface $dateCandidature): self
+    public function setDateCandidature(\DateTimeInterface $dateCandidature): static
     {
         $this->dateCandidature = $dateCandidature;
         return $this;
@@ -127,7 +146,7 @@ class Candidature
         return $this->cv;
     }
 
-    public function setCv(?string $cv): self
+    public function setCv(?string $cv): static
     {
         $this->cv = $cv;
         return $this;
@@ -138,21 +157,29 @@ class Candidature
         return $this->lettreMotivation;
     }
 
-    public function setLettreMotivation(?string $lettreMotivation): self
+    public function setLettreMotivation(?string $lettreMotivation): static
     {
         $this->lettreMotivation = $lettreMotivation;
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(string $status): static
     {
+        if (!in_array($status, array_values(self::STATUS_CHOICES))) {
+            throw new \InvalidArgumentException("Statut invalide");
+        }
         $this->status = $status;
         return $this;
+    }
+
+    public function getStatusLabel(): string
+    {
+        return array_flip(self::STATUS_CHOICES)[$this->status] ?? $this->status;
     }
 
     public function getNoteInterne(): ?string
@@ -160,7 +187,7 @@ class Candidature
         return $this->noteInterne;
     }
 
-    public function setNoteInterne(?string $noteInterne): self
+    public function setNoteInterne(?string $noteInterne): static
     {
         $this->noteInterne = $noteInterne;
         return $this;
@@ -171,7 +198,7 @@ class Candidature
         return $this->offre;
     }
 
-    public function setOffre(?Offre $offre): self
+    public function setOffre(?Offre $offre): static
     {
         $this->offre = $offre;
         return $this;
@@ -182,9 +209,46 @@ class Candidature
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?User $user): static
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getCvFile(): ?File
+    {
+        return $this->cvFile;
+    }
+
+    public function setCvFile(?File $cvFile = null): void
+    {
+        $this->cvFile = $cvFile;
+        if (null !== $cvFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getLettreMotivationFile(): ?File
+    {
+        return $this->lettreMotivationFile;
+    }
+
+    public function setLettreMotivationFile(?File $lettreMotivationFile = null): void
+    {
+        $this->lettreMotivationFile = $lettreMotivationFile;
+        if (null !== $lettreMotivationFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 }
