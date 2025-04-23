@@ -13,6 +13,24 @@
             "src/Repository/.gitignore"
         ]
     },
+
+
+ HEAD
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
+        ]
+    },
+
+ a69647697b066db034d48a23f9f8de87509dd430
+ dev
     "doctrine/doctrine-migrations-bundle": {
         "version": "3.4",
         "recipe": {
@@ -26,6 +44,10 @@
             "migrations/.gitignore"
         ]
     },
+ dev_marte
+
+ HEAD
+ dev
     "phpunit/phpunit": {
         "version": "12.1",
         "recipe": {
@@ -40,6 +62,11 @@
             "tests/bootstrap.php"
         ]
     },
+ dev_marte
+
+
+ a69647697b066db034d48a23f9f8de87509dd430
+ dev
     "symfony/console": {
         "version": "7.2",
         "recipe": {
@@ -118,12 +145,17 @@
             "config/routes.yaml"
         ]
     },
+ dev_marte
     "symfony/twig-bundle": {
+
+    "symfony/security-bundle": {
+ dev
         "version": "7.2",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "6.4",
+ dev_marte
             "ref": "cab5fd2a13a45c266d45a7d9337e28dee6272877"
         },
         "files": [
@@ -157,6 +189,13 @@
             "config/packages/webpack_encore.yaml",
             "package.json",
             "webpack.config.js"
+
+            "ref": "2ae08430db28c8eb4476605894296c82a642028f"
+        },
+        "files": [
+            "config/packages/security.yaml",
+            "config/routes/security.yaml"
+ dev
         ]
     }
 }
