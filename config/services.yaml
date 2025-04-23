@@ -1,0 +1,10 @@
+services:
+    # Activer l'autowiring et l'autoconfiguration
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Charger tous les contrôleurs dans le dossier Controller
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']

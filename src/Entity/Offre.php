@@ -34,10 +34,6 @@
 //Cette entité permet de gérer les candidatures associées à une offre. Par exemple, vous pouvez afficher toutes les candidatures d'une offre et suivre leur progression dans le processus de recrutement.
 
 
-
-
-
-
 namespace App\Entity;
 
 use App\Repository\OffreRepository;

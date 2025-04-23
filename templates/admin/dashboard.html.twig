@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord Admin</title>
+</head>
+<body>
+    <h1>Tableau de bord Admin</h1>
+    <p>Bienvenue dans l'interface RH !</p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom de l'Offre</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for offre in offres %}
+                <tr>
+                    <td>{{ offre.id }}</td>
+                    <td>{{ offre.titre }}</td>
+                    <td>{{ offre.date }}</td>
+                    <td>{{ offre.statut }}</td>
+                    <td>
+                        <a href="#">Modifier</a> |
+                        <a href="#">Publier</a> |
+                        <a href="#">Archiver</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
