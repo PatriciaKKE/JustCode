@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la candidature{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Candidature de {{ candidature.user.username }}</h1>
+
+        <div class="mb-3">
+            <strong>Offre :</strong> {{ candidature.offre.titre }}
+        </div>
+
+        <div class="mb-3">
+            <strong>Statut :</strong>
+            <span class="badge 
+                {% if candidature.statut == 'en_attente' %}
+                    bg-warning
+                {% elseif candidature.statut == 'acceptee' %}
+                    bg-success
+                {% else %}
+                    bg-danger
+                {% endif %}
+            ">
+                {{ candidature.statut | capitalize }}
+            </span>
+        </div>
+
+        <div class="mb-3">
+            <strong>Date de la candidature :</strong> {{ candidature.dateCandidature ? candidature.dateCandidature|date('d/m/Y') : '' }}
+        </div>
+
+        <div class="mb-3">
+            <strong>Message :</strong>
+            <p>{{ candidature.message }}</p>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('candidature_edit', {'id': candidature.id}) }}" class="btn btn-warning">✏️ Modifier</a>
+            <a href="{{ path('candidature_edit_statut', {'id': candidature.id}) }}" class="btn btn-secondary">📝 Modifier le statut</a>
+            {{ include('c

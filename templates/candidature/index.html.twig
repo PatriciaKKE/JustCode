@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des candidatures{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Toutes les candidatures</h1>
+
+        <a href="{{ path('candidature_new') }}" class="btn btn-success mb-3">➕ Nouvelle candidature</a>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Candidat</th>
+                    <th>Offre</th>
+                    <th>Statut</th>
+                    <th>Date de candidature</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidature in candidatures %}
+                    <tr>
+                        <td>{{ candidature.id }}</td>
+                        <td>{{ candidature.user.username }}</td>
+                        <td>{{ candidature.offre.titre }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if candidature.statut == 'en_attente' %}
+                                    bg-warning
+                                {% elseif candidature.statut == 'acceptee' %}
+                                    bg-success
+                                {% else %}
+                                    bg-danger
+                                {% endif %}
+                            ">
+                                {{ candidature.statut | capitalize }}
+                            </span>
+                        </td>
+                        <td>{{ candidature.dateCandidature ? candidature.dateCandidature|date('d/m/Y') : '' }}</td>
+                        <td>
+                            <a href="{{ path('candidature_show', {'id': candidature.id}) }}" class="btn btn-sm btn-info">👁 Voir</a>
+                            <a href="{{ path('candidature_edit', {'id': candidature.id}) }}" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                            <a href="{{ path('candidature_edit_statut', {'id': candidature.id}) }}" class="btn
