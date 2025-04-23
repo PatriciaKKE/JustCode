@@ -9,34 +9,52 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CandidatureRepository::class)]
 class Candidature
 {
+    // 1. Liste des statuts possibles
+    public const STATUSES = ['reçue', 'en cours', 'entretien', 'refusée'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: "Le nom est requis.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: "Le prénom est requis.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Email]
+    #[Assert\NotBlank(message: "L’email est requis.")]
+    #[Assert\Email(message: "L’email '{{ value }}' n’est pas valide.")]
     private ?string $email = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $dateCandidature = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['application/pdf'],
+        mimeTypesMessage: 'Le CV doit être un fichier PDF de maximum 2 Mo.'
+    )]
     private ?string $cv = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['application/pdf'],
+        mimeTypesMessage: 'La lettre de motivation doit être un fichier PDF de maximum 2 Mo.'
+    )]
     private ?string $lettreMotivation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
+    #[Assert\Choice(
+        choices: self::STATUSES,
+        message: 'Le statut doit être l’un des suivants : {{ choices }}.'
+    )]
+    private ?string $status = 'reçue';
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $noteInterne = null;
@@ -46,13 +64,13 @@ class Candidature
     private ?Offre $offre = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'candidatures')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]  // nullable pour candidatures anonymes si besoin
     private ?User $user = null;
 
     public function __construct()
     {
-        // Default values
         $this->dateCandidature = new \DateTime();
+        $this->status = 'reçue';
     }
 
     public function getId(): ?int
@@ -68,7 +86,6 @@ class Candidature
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -80,7 +97,6 @@ class Candidature
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -92,7 +108,6 @@ class Candidature
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -104,7 +119,6 @@ class Candidature
     public function setDateCandidature(\DateTimeInterface $dateCandidature): self
     {
         $this->dateCandidature = $dateCandidature;
-
         return $this;
     }
 
@@ -116,7 +130,6 @@ class Candidature
     public function setCv(?string $cv): self
     {
         $this->cv = $cv;
-
         return $this;
     }
 
@@ -128,7 +141,6 @@ class Candidature
     public function setLettreMotivation(?string $lettreMotivation): self
     {
         $this->lettreMotivation = $lettreMotivation;
-
         return $this;
     }
 
@@ -140,7 +152,6 @@ class Candidature
     public function setStatus(?string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -152,7 +163,6 @@ class Candidature
     public function setNoteInterne(?string $noteInterne): self
     {
         $this->noteInterne = $noteInterne;
-
         return $this;
     }
 
@@ -164,7 +174,6 @@ class Candidature
     public function setOffre(?Offre $offre): self
     {
         $this->offre = $offre;
-
         return $this;
     }
 
@@ -176,7 +185,6 @@ class Candidature
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 }

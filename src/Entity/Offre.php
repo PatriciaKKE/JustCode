@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\OffreRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
@@ -16,23 +17,37 @@ class Offre
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le titre est requis.")]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "Le titre doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $titre = null;
 
     #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: "La description est requise.")]
     private ?string $description = null;
 
     #[ORM\Column(type: "datetime")]
+    #[Assert\NotNull(message: "La date de publication est requise.")]
     private ?\DateTimeInterface $datePublication = null;
 
     #[ORM\Column(type: "datetime", nullable: true)]
+    #[Assert\GreaterThan(
+        propertyPath: "datePublication",
+        message: "La date de fin doit être postérieure à la date de publication."
+    )]
     private ?\DateTimeInterface $dateFinPublication = null;
 
-    #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Candidature::class)]
+    #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Candidature::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $candidatures;
 
     public function __construct()
     {
         $this->candidatures = new ArrayCollection();
+        $this->datePublication = new \DateTime();
     }
 
     public function getId(): ?int
@@ -48,7 +63,6 @@ class Offre
     public function setTitre(string $titre): self
     {
         $this->titre = $titre;
-
         return $this;
     }
 
@@ -60,7 +74,6 @@ class Offre
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -72,7 +85,6 @@ class Offre
     public function setDatePublication(\DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
-
         return $this;
     }
 
@@ -84,7 +96,6 @@ class Offre
     public function setDateFinPublication(?\DateTimeInterface $dateFinPublication): self
     {
         $this->dateFinPublication = $dateFinPublication;
-
         return $this;
     }
 
@@ -102,19 +113,16 @@ class Offre
             $this->candidatures[] = $candidature;
             $candidature->setOffre($this);
         }
-
         return $this;
     }
 
     public function removeCandidature(Candidature $candidature): self
     {
         if ($this->candidatures->removeElement($candidature)) {
-            // Set the owning side to null (unless already changed)
             if ($candidature->getOffre() === $this) {
                 $candidature->setOffre(null);
             }
         }
-
         return $this;
     }
 }
