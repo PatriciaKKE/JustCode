@@ -13,6 +13,7 @@
             "src/Repository/.gitignore"
         ]
     },
+ HEAD
     "doctrine/doctrine-fixtures-bundle": {
         "version": "4.1",
         "recipe": {
@@ -25,6 +26,8 @@
             "src/DataFixtures/AppFixtures.php"
         ]
     },
+
+ a69647697b066db034d48a23f9f8de87509dd430
     "doctrine/doctrine-migrations-bundle": {
         "version": "3.4",
         "recipe": {
@@ -38,6 +41,7 @@
             "migrations/.gitignore"
         ]
     },
+ HEAD
     "phpunit/phpunit": {
         "version": "12.1",
         "recipe": {
@@ -52,6 +56,8 @@
             "tests/bootstrap.php"
         ]
     },
+=======
+>>>>>>> a69647697b066db034d48a23f9f8de87509dd430
     "symfony/console": {
         "version": "7.2",
         "recipe": {

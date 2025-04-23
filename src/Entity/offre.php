@@ -3,33 +3,30 @@
 namespace App\Entity;
 
 use App\Repository\OffreRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    private $titre;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    #[ORM\Column(type: 'datetime')]
+    private $datePublication;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datePublication = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private $statut;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateFinPublication = null;
-
-    #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Candidature::class, orphanRemoval: true)]
-    private Collection $candidatures;
+    #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Candidature::class, cascade: ['persist', 'remove'])]
+    private $candidatures;
 
     public function __construct()
     {
@@ -53,18 +50,6 @@ class Offre
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getDatePublication(): ?\DateTimeInterface
     {
         return $this->datePublication;
@@ -77,14 +62,14 @@ class Offre
         return $this;
     }
 
-    public function getDateFinPublication(): ?\DateTimeInterface
+    public function getStatut(): ?string
     {
-        return $this->dateFinPublication;
+        return $this->statut;
     }
 
-    public function setDateFinPublication(?\DateTimeInterface $dateFinPublication): self
+    public function setStatut(string $statut): self
     {
-        $this->dateFinPublication = $dateFinPublication;
+        $this->statut = $statut;
 
         return $this;
     }
@@ -100,7 +85,7 @@ class Offre
     public function addCandidature(Candidature $candidature): self
     {
         if (!$this->candidatures->contains($candidature)) {
-            $this->candidatures->add($candidature);
+            $this->candidatures[] = $candidature;
             $candidature->setOffre($this);
         }
 
@@ -110,7 +95,6 @@ class Offre
     public function removeCandidature(Candidature $candidature): self
     {
         if ($this->candidatures->removeElement($candidature)) {
-            // set the owning side to null (unless already changed)
             if ($candidature->getOffre() === $this) {
                 $candidature->setOffre(null);
             }
