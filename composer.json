@@ -1,7 +1,9 @@
 {
+    "name": "votre_nom/votre_projet",
+    "description": "Description de votre projet",
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
@@ -30,6 +32,7 @@
         "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
         "symfony/runtime": "7.2.*",
+dev
  dev_marte
         "symfony/security-csrf": "7.2.*",
         "symfony/twig-bundle": "7.2.*",
@@ -47,17 +50,30 @@
         "phpunit/phpunit": "^12.1",
 
  a69647697b066db034d48a23f9f8de87509dd430
+
+        "symfony/translation": "7.2.*",
+        "symfony/yaml": "7.2.*",
+        "vich/uploader-bundle": "^2.6"
+    },
+    "require-dev": {
+        "doctrine/annotations": "^2.0",
+        "doctrine/dbal": "^4.2",
+        "doctrine/orm": "^3.3",
+ dev_malika
         "symfony/maker-bundle": "^1.62"
     },
  dev
     "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
-        },
-        "bump-after-update": true,
-        "sort-packages": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -72,12 +88,7 @@
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*",
-        "symfony/polyfill-php82": "*"
+        "symfony/polyfill-php72": "*"
     },
     "scripts": {
         "auto-scripts": {
