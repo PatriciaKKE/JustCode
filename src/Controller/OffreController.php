@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use App\Repository\OffreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-final class OffreController extends AbstractController
+class OffreController extends AbstractController
 {
-    #[Route('/offre', name: 'app_offre')]
-    public function index(): JsonResponse
+    #[Route('/offres', name: 'app_offre_index')]
+    public function index(OffreRepository $offreRepository): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/OffreController.php',
+        $offres = $offreRepository->findAll();
+
+        return $this->render('offre/index.html.twig', [
+            'offres' => $offres,
         ]);
     }
 }
