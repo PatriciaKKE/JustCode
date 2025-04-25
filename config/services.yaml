@@ -1,3 +1,4 @@
+ HEAD
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -22,3 +23,17 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Security\UserProvider:
+        arguments: ['@App\Repository\UserRepository']
+
+services:
+    # Activer l'autowiring et l'autoconfiguration
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Charger tous les contrôleurs dans le dossier Controller
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+ a69647697b066db034d48a23f9f8de87509dd430
