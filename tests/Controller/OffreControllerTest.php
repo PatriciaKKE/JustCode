@@ -2,14 +2,18 @@
 
 namespace App\Tests\Controller;
 
+dev_marte
 use App\Entity\Offre;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+
+dev
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class OffreControllerTest extends WebTestCase
 {
+ dev_marte
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $offreRepository;
@@ -127,5 +131,13 @@ final class OffreControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/offre/');
         self::assertSame(0, $this->offreRepository->count([]));
+
+    public function testIndex(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/offre');
+
+        self::assertResponseIsSuccessful();
+ dev
     }
 }

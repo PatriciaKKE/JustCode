@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidatures - {{ offre.titre }}{% endblock %}
+
+{% block body %}
+<h2>Candidatures pour : {{ offre.titre }}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>CV</th>
+            <th>Lettre</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for candidat in candidatures %}
+        <tr>
+            <td>{{ candidat.nom }}</td>
+            <td>{{ candidat.email }}</td>
+            <td>
+                {% if candidat.cv %}
+                <a href="{{ asset('uploads/cv/' ~ candidat.cv) }}" target="_blank">Voir</a>
+                {% endif %}
+            </td>
+            <td>
+                {% if candidat.lettre %}
+                <a href="{{ asset('uploads/lettres/' ~ candidat.lettre) }}" target="_blank">Voir</a>
+                {% endif %}
+            </td>
+            <td>{{ candidat.statut }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">Aucune candidature.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

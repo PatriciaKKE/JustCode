@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+<h1>Tableau de bord RH</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre du Poste</th>
+            <th>Date de Publication</th>
+            <th>Candidatures</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for offre in offres %}
+        <tr>
+            <td><a href="#">{{ offre.titre }}</a></td>
+            <td>{{ offre.datePublication|date('d/m/Y') }}</td>
+            <td>{{ offre.candidatures }}</td>
+            <td>{{ offre.statut }}</td>
+            <td>
+                <a href="#">Modifier</a> |
+                <a href="#">Clôturer</a> |
+                <a href="#">Publier</a> |
+                <a href="#">Archiver</a> |
+                <a href="#">Voir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
