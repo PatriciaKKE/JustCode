@@ -1,0 +1,54 @@
+ dev_marte
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: symfony_user
+      POSTGRES_PASSWORD: motdepassefort
+      POSTGRES_DB: portail_rh
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  my_network:
+    driver: bridge
+
+version: "3.9"
+
+services:
+  database:
+    image: postgres:16
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: patricia
+      POSTGRES_DB: portal_rh
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:9000"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DATABASE_URL: postgresql://db_user:patricia@db:5432/portal_rh?serverVersion=16&charset=utf8
+    depends_on:
+      - database
+
+volumes:
+  db_data:
+ dev
