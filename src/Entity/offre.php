@@ -28,6 +28,9 @@ class Offre
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateFinPublication = null;
 
+    #[ORM\Column(length: 50, options: ['default' => 'Brouillon'])]
+    private ?string $statut = 'Brouillon';
+
     #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Candidature::class, orphanRemoval: true)]
     private Collection $candidatures;
 
@@ -85,6 +88,18 @@ class Offre
     public function setDateFinPublication(?\DateTimeInterface $dateFinPublication): self
     {
         $this->dateFinPublication = $dateFinPublication;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }
