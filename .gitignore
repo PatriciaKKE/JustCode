@@ -9,17 +9,23 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+ dev
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/
 ###< phpunit/phpunit ###
  dev_marte
 
+
+ dev_jose
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+ dev
 
  dev
+
+ dev_jose

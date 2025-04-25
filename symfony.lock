@@ -135,6 +135,21 @@
             "src/Kernel.php"
         ]
     },
+ dev
+
+    "symfony/mailer": {
+        "version": "7.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "09051cfde49476e3c12cd3a0e44289ace1c75a4f"
+        },
+        "files": [
+            "config/packages/mailer.yaml"
+        ]
+    },
+ dev_jose
     "symfony/maker-bundle": {
         "version": "1.62",
         "recipe": {
@@ -157,6 +172,7 @@
             "config/routes.yaml"
         ]
     },
+ dev
 dev
  dev_marte
     "symfony/twig-bundle": {
@@ -173,6 +189,27 @@ dev_malika
 dev
             "version": "6.4",
  dev_marte
+
+    "symfony/security-bundle": {
+        "version": "7.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "2ae08430db28c8eb4476605894296c82a642028f"
+        },
+        "files": [
+            "config/packages/security.yaml",
+            "config/routes/security.yaml"
+        ]
+    },
+    "symfony/twig-bundle": {
+        "version": "7.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+ dev_jose
             "ref": "cab5fd2a13a45c266d45a7d9337e28dee6272877"
         },
         "files": [
@@ -206,6 +243,7 @@ dev
             "config/packages/webpack_encore.yaml",
             "package.json",
             "webpack.config.js"
+ dev
 
             "ref": "2ae08430db28c8eb4476605894296c82a642028f"
         },
@@ -233,6 +271,8 @@ dev
         "files": [
             "config/packages/vich_uploader.yaml"
  dev_malika
+
+ dev_jose
         ]
     }
 }

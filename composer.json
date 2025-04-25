@@ -28,10 +28,16 @@
  dev
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
+      dev
         "symfony/flex": "^2.5",
+
+        "symfony/flex": "^2",
+      dev_jose
         "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/mailer": "7.2.*",
         "symfony/runtime": "7.2.*",
+ dev
 dev
  dev_marte
         "symfony/security-csrf": "7.2.*",
@@ -63,6 +69,14 @@ dev
         "symfony/maker-bundle": "^1.62"
     },
  dev
+
+        "symfony/security-bundle": "7.2.*",
+        "symfony/twig-bundle": "7.2.*",
+        "symfony/validator": "7.2.*",
+        "symfony/webpack-encore-bundle": "^2.2",
+        "symfony/yaml": "7.2.*"
+    },
+ dev_jose
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {
@@ -73,7 +87,12 @@ dev
             "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
+ dev
         }
+
+        },
+        "sort-packages": true
+ dev_jose
     },
     "autoload": {
         "psr-4": {
@@ -85,11 +104,13 @@ dev
             "App\\Tests\\": "tests/"
         }
     },
+ dev
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-php72": "*"
     },
+ dev_jose
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
@@ -102,9 +123,6 @@ dev
             "@auto-scripts"
         ]
     },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
     "extra": {
         "symfony": {
             "allow-contrib": false,
@@ -112,7 +130,10 @@ dev
         }
     },
     "require-dev": {
+ dev
         "phpunit/phpunit": "^12.1",
+
+ dev_jose
         "symfony/maker-bundle": "^1.62"
     }
 }
