@@ -1,27 +1,20 @@
-<?php
+{% extends 'base.html.twig' %}
 
-namespace App\DataFixtures;
+{% block title %}Offres d'emploi{% endblock %}
 
-use App\Entity\Offre;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+{% block body %}
+    <h1>Offres d'emploi</h1>
 
-class AppFixtures extends Fixture
-{
-    public function load(ObjectManager $manager): void
-    {
-        $offre = new Offre();
-        $offre->setTitre('Développeur Symfony');
-        $offre->setDescription('Nous recherchons un développeur Symfony expérimenté pour rejoindre notre équipe.');
-        $offre->setDatePublication(new \DateTime());
-        $manager->persist($offre);
-
-        $offre2 = new Offre();
-        $offre2->setTitre('Chef de Projet');
-        $offre2->setDescription('Nous recherchons un chef de projet expérimenté pour rejoindre notre équipe.');
-        $offre2->setDatePublication(new \DateTime());
-        $manager->persist($offre2);
-
-        $manager->flush();
-    }
-}
+    <div class="offres">
+        {% for offre in offres %}
+            <div class="offre">
+                <h2>{{ offre.titre }}</h2>
+                <p><strong>Entreprise :</strong> {{ offre.entreprise }}</p>
+                <p><strong>Lieu :</strong> {{ offre.lieu }}</p>
+                <p><strong>Type de contrat :</strong> {{ offre.typeContrat }}</p>
+                <p>{{ offre.description|truncate(200, true, '...') }}</p> {# Affiche une partie de la description #}
+                <a href="{{ path('app_offre_show', {'id': offre.id}) }}" class="btn btn-primary">Voir détail</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

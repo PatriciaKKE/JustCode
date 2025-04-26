@@ -1,0 +1,20 @@
+se.html.twig' %}
+
+{% block title %}{{ offre.titre }}{% endblock %}
+
+{% block body %}
+    <h1>{{ offre.titre }}</h1>
+
+    <p><strong>Entreprise :</strong> {{ offre.entreprise }}</p>
+    <p><strong>Lieu :</strong> {{ offre.lieu }}</p>
+    <p><strong>Type de contrat :</strong> {{ offre.typeContrat }}</p>
+    <p><strong>Date de publication :</strong> {{ offre.datePublication|date('Y-m-d') }}</p>
+
+    <h2>Description du poste</h2>
+    <p>{{ offre.description|nl2br }}</p> {# Affiche la description avec les sauts de ligne #}
+
+    {# Lien vers le formulaire de candidature (à implémenter par ton collaborateur) #}
+    <a href="#" class="btn btn-success">Postuler</a>
+
+    <p><a href="{{ path('app_offre_index') }}">Retour à la liste des offres</a></p>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Offre;
 use App\Repository\OffreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,14 @@ class OffreController extends AbstractController
 
         return $this->render('offre/index.html.twig', [
             'offres' => $offres,
+        ]);
+    }
+
+    #[Route('/offre/{id}', name: 'app_offre_show')]
+    public function show(Offre $offre): Response
+    {
+        return $this->render('offre/show.html.twig', [
+            'offre' => $offre,
         ]);
     }
 }
