@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Offres{% endblock %}
+
+{% block body %}
+<h1>Liste des Offres</h1>
+
+<a href="{{ path('admin_offres_new') }}" class="btn btn-success mb-3">+ Nouvelle offre</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Lieu</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for offre in offres %}
+        <tr>
+            <td>{{ offre.titre }}</td>
+            <td>{{ offre.typeContrat }}</td>
+            <td>{{ offre.lieu }}</td>
+            <td>
+                <a href="{{ path('admin_offres_edit', {id: offre.id}) }}" class="btn btn-primary btn-sm">✏️ Modifier</a>
+                <a href="{{ path('admin_offres_delete', {id: offre.id}) }}" class="btn btn-danger btn-sm">❌ Supprimer</a>
+                <a href="{{ path('admin_candidatures_par_offre', {id: offre.id}) }}" class="btn btn-info btn-sm">👁️ Voir candidatures</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
