@@ -1,0 +1,257 @@
+<<<<<<< HEAD
+=======
+ dev
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi des Candidatures{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    <style>
+        .status-badge {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .status-badge:hover {
+            opacity: 0.8;
+        }
+        .candidate-card {
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+        .candidate-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Colonne de gauche - Liste des candidatures -->
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 font-weight-bold text-primary">Liste des Candidatures</h5>
+                    <a href="{{ path('app_candidature_new') }}" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus-circle"></i> Ajouter
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Offre</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for candidature in candidatures %}
+                                <tr class="candidate-row" data-id="{{ candidature.id }}">
+                                    <td>{{ candidature.prenom }} {{ candidature.nom }}</td>
+                                    <td>{{ candidature.offre.titre }}</td>
+                                    <td>{{ candidature.dateCandidature|date('d/m/Y') }}</td>
+                                    <td>
+                                        <span class="badge status-badge bg-{{ 
+                                            candidature.status == 'reçue' ? 'info' :
+                                            candidature.status == 'en cours' ? 'primary' :
+                                            candidature.status == 'entretien' ? 'warning' :
+                                            candidature.status == 'acceptée' ? 'success' : 'danger'
+                                        }}">
+                                            {{ candidature.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary view-btn" data-id="{{ candidature.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">Aucune candidature trouvée</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite - Détails et gestion du statut -->
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-primary">Gestion de la candidature</h5>
+                </div>
+                <div class="card-body" id="candidate-details">
+                    <div class="text-center py-5">
+                        <i class="fas fa-user-tie fa-3x text-gray-400"></i>
+                        <p class="mt-3">Sélectionnez une candidature pour voir les détails</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire de changement de statut (caché par défaut) -->
+            <div class="card shadow mb-4 d-none" id="status-form-container">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-primary">Changer le statut</h5>
+                </div>
+                <div class="card-body">
+                    <form id="status-update-form">
+                        <input type="hidden" id="candidate-id">
+                        <div class="form-group">
+                            <label for="status-select">Nouveau statut</label>
+                            <select class="form-control" id="status-select">
+                                <option value="reçue">Reçue</option>
+                                <option value="en cours">En cours</option>
+                                <option value="entretien">Entretien</option>
+                                <option value="acceptée">Acceptée</option>
+                                <option value="refusée">Refusée</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Mettre à jour</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de la sélection d'une candidature
+            document.querySelectorAll('.candidate-row').forEach(row => {
+                row.addEventListener('click', function() {
+                    const candidateId = this.getAttribute('data-id');
+                    
+                    // Simulation de chargement
+                    document.getElementById('candidate-details').innerHTML = `
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Chargement...</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Ici vous devriez faire un appel AJAX pour récupérer les détails
+                    // Pour l'exemple, nous simulons une réponse
+                    setTimeout(() => {
+                        document.getElementById('candidate-details').innerHTML = `
+                            <div>
+                                <h6>Détails du candidat</h6>
+                                <hr>
+                                <p><strong>Nom complet :</strong> ${this.cells[0].textContent}</p>
+                                <p><strong>Offre :</strong> ${this.cells[1].textContent}</p>
+                                <p><strong>Date :</strong> ${this.cells[2].textContent}</p>
+                                <p><strong>Statut actuel :</strong> ${this.cells[3].textContent}</p>
+                                
+                                <div class="mt-4">
+                                    <a href="/uploads/candidatures/cv_${candidateId}.pdf" 
+                                       class="btn btn-sm btn-outline-primary" download>
+                                        <i class="fas fa-download"></i> Télécharger CV
+                                    </a>
+                                    <a href="/uploads/candidatures/lettre_${candidateId}.pdf" 
+                                       class="btn btn-sm btn-outline-secondary" download>
+                                        <i class="fas fa-download"></i> Télécharger Lettre
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Afficher le formulaire de statut
+                        document.getElementById('status-form-container').classList.remove('d-none');
+                        document.getElementById('candidate-id').value = candidateId;
+                        
+                        // Pré-sélectionner le statut actuel
+                        const currentStatus = this.cells[3].textContent.trim();
+                        document.getElementById('status-select').value = currentStatus;
+                    }, 500);
+                });
+            });
+            
+            // Gestion du formulaire de statut
+            document.getElementById('status-update-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const candidateId = document.getElementById('candidate-id').value;
+                const newStatus = document.getElementById('status-select').value;
+                
+                // Ici vous devriez faire un appel AJAX pour mettre à jour le statut
+                // Pour l'exemple, nous simulons une mise à jour
+                fetch(`/candidature/${candidateId}/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Mettre à jour l'affichage
+                    const badge = document.querySelector(`.candidate-row[data-id="${candidateId}"] .status-badge`);
+                    badge.textContent = newStatus;
+                    
+                    // Changer la couleur du badge selon le statut
+                    const statusClasses = {
+                        'reçue': 'bg-info',
+                        'en cours': 'bg-primary',
+                        'entretien': 'bg-warning',
+                        'acceptée': 'bg-success',
+                        'refusée': 'bg-danger'
+                    };
+                    
+                    // Supprimer toutes les classes de couleur
+                    badge.classList.remove('bg-info', 'bg-primary', 'bg-warning', 'bg-success', 'bg-danger');
+                    // Ajouter la nouvelle classe
+                    badge.classList.add(statusClasses[newStatus]);
+                    
+                    // Afficher un message de succès
+                    alert('Statut mis à jour avec succès!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Une erreur est survenue');
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+>>>>>>> b8bf1d85901067132b4b00811dabc435eb151182
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+<<<<<<< HEAD
+        {% endblock %}
+
+        {% block javascripts %}
+=======
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+>>>>>>> b8bf1d85901067132b4b00811dabc435eb151182
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>
+<<<<<<< HEAD
+=======
+ dev_jose
+>>>>>>> b8bf1d85901067132b4b00811dabc435eb151182

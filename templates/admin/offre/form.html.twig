@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire offre{% endblock %}
+
+{% block body %}
+<h1>Offre</h1>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">💾 Enregistrer</button>
+{{ form_end(form) }}
+
+<a href="{{ path('admin_offres') }}" class="btn btn-secondary mt-3">⬅️ Retour à la liste</a>
+{% endblock %}

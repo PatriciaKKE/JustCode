@@ -1,4 +1,8 @@
 <?php
+ dev_bryan
+
+namespace App\Controller\Admin;
+ dev
 
 namespace App\Controller;
 
@@ -65,4 +69,9 @@ class AdminCandidatureController extends AbstractController
 
         return $this->redirectToRoute('admin_dashboard');
     }
+ dev_bryan
 }
+
+}
+
+ dev

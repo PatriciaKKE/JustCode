@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidatures - {{ offre.titre }}{% endblock %}
+
+{% block body %}
+<h2>Candidatures pour : {{ offre.titre }}</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>CV</th>
+            <th>Lettre</th>
+            <th>Statut</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for candidature in candidatures %}
+        <tr>
+            <td>{{ candidature.nom }}</td>
+            <td>{{ candidature.email }}</td>
+            <td><a href="{{ asset('uploads/cv/' ~ candidature.cv) }}" target="_blank">📎 CV</a></td>
+            <td><a href="{{ asset('uploads/lettres/' ~ candidature.lettre) }}" target="_blank">📎 Lettre</a></td>
+            <td>{{ candidature.statut }}</td>
+            <td>
+                <form method="POST" action="{{ path('admin_candidature_changer_statut', {id: candidature.id}) }}">
+                    <select name="statut" onchange="this.form.submit()">
+                        {% for s in ['reçue', 'en_cours', 'entretien', 'refusée'] %}
+                            <option value="{{ s }}" {% if candidature.statut == s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

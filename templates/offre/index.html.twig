@@ -1,10 +1,71 @@
+ HEAD
+{% extends 'base.html.twig' %}
+
+ dev_marte
+{% extends 'base.html.twig' %}
+
+{% block title %}Offre index{% endblock %}
+
+{% block body %}
+    <h1>Offre index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>DatePublication</th>
+                <th>DateFinPublication</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for offre in offres %}
+            <tr>
+                <td>{{ offre.id }}</td>
+                <td>{{ offre.titre }}</td>
+                <td>{{ offre.description }}</td>
+                <td>{{ offre.datePublication ? offre.datePublication|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ offre.dateFinPublication ? offre.dateFinPublication|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_offre_show', {'id': offre.id}) }}">show</a>
+                    <a href="{{ path('app_offre_edit', {'id': offre.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_offre_new') }}">Create new</a>
+{% endblock %}
+
 <?php
+ b8bf1d85901067132b4b00811dabc435eb151182
 
-namespace App\DataFixtures;
+{% block title %}Offres d'emploi{% endblock %}
 
-use App\Entity\Offre;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+{% block body %}
+    <h1>Offres d'emploi</h1>
+
+ HEAD
+    <div class="offres">
+        {% for offre in offres %}
+            <div class="offre">
+                <h2>{{ offre.titre }}</h2>
+                <p><strong>Entreprise :</strong> {{ offre.entreprise }}</p>
+                <p><strong>Lieu :</strong> {{ offre.lieu }}</p>
+                <p><strong>Type de contrat :</strong> {{ offre.typeContrat }}</p>
+                <p>{{ offre.description|truncate(200, true, '...') }}</p> {# Affiche une partie de la description #}
+                <a href="{{ path('app_offre_show', {'id': offre.id}) }}" class="btn btn-primary">Voir détail</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
 
 class AppFixtures extends Fixture
 {
@@ -25,3 +86,5 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 }
+ dev
+ b8bf1d85901067132b4b00811dabc435eb151182
