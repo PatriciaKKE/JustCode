@@ -1,10 +1,58 @@
+ HEAD
 {% extends 'base.html.twig' %}
+
+ dev_marte
+{% extends 'base.html.twig' %}
+
+{% block title %}Offre index{% endblock %}
+
+{% block body %}
+    <h1>Offre index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>DatePublication</th>
+                <th>DateFinPublication</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for offre in offres %}
+            <tr>
+                <td>{{ offre.id }}</td>
+                <td>{{ offre.titre }}</td>
+                <td>{{ offre.description }}</td>
+                <td>{{ offre.datePublication ? offre.datePublication|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ offre.dateFinPublication ? offre.dateFinPublication|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_offre_show', {'id': offre.id}) }}">show</a>
+                    <a href="{{ path('app_offre_edit', {'id': offre.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_offre_new') }}">Create new</a>
+{% endblock %}
+
+<?php
+ b8bf1d85901067132b4b00811dabc435eb151182
 
 {% block title %}Offres d'emploi{% endblock %}
 
 {% block body %}
     <h1>Offres d'emploi</h1>
 
+ HEAD
     <div class="offres">
         {% for offre in offres %}
             <div class="offre">
@@ -18,3 +66,25 @@
         {% endfor %}
     </div>
 {% endblock %}
+
+class AppFixtures extends Fixture
+{
+    public function load(ObjectManager $manager): void
+    {
+        $offre = new Offre();
+        $offre->setTitre('Développeur Symfony');
+        $offre->setDescription('Nous recherchons un développeur Symfony expérimenté pour rejoindre notre équipe.');
+        $offre->setDatePublication(new \DateTime());
+        $manager->persist($offre);
+
+        $offre2 = new Offre();
+        $offre2->setTitre('Chef de Projet');
+        $offre2->setDescription('Nous recherchons un chef de projet expérimenté pour rejoindre notre équipe.');
+        $offre2->setDatePublication(new \DateTime());
+        $manager->persist($offre2);
+
+        $manager->flush();
+    }
+}
+ dev
+ b8bf1d85901067132b4b00811dabc435eb151182
