@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # Install dependencies
 RUN apk add --no-cache postgresql-dev libzip-dev icu-dev g++ make autoconf libtool
@@ -16,7 +16,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-ansi --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-ansi --no-interaction --optimize-autoloader
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

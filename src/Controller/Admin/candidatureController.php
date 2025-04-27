@@ -1,3 +1,4 @@
+<?php
 namespace App\Controller\Admin;
 
 use App\Entity\Candidature;
@@ -43,3 +44,4 @@ class CandidatureController extends AbstractController
         ]);
     }
 }
+
